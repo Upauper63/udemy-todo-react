@@ -5,14 +5,8 @@ import { IncompleteTodos } from "./components/IncompleteTodos";
 import { CompleteTodos } from "./components/CompleteTodos";
 
 export function App() {
-  const [incompleteTodos, setIncompleteTodos] = useState([
-    "未完了Todo1",
-    "未完了Todo2"
-  ]);
-  const [completeTodos, setCompleteTodos] = useState([
-    "完了済みのTodo1",
-    "完了済みのTodo2"
-  ]);
+  const [incompleteTodos, setIncompleteTodos] = useState([]);
+  const [completeTodos, setCompleteTodos] = useState([]);
   const [todoText, setTodoText] = useState("");
   const onChangeTodoText = (e) => {
     setTodoText(e.target.value);
