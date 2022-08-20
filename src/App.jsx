@@ -1,31 +1,59 @@
+import { useState } from "react";
 import "./styles.css";
+import { InputTodo } from "./components/InputTodo";
+import { IncompleteTodos } from "./components/IncompleteTodos";
+import { CompleteTodos } from "./components/CompleteTodos";
 
 export function App() {
+  const [incompleteTodos, setIncompleteTodos] = useState([
+    "未完了Todo1",
+    "未完了Todo2"
+  ]);
+  const [completeTodos, setCompleteTodos] = useState([
+    "完了済みのTodo1",
+    "完了済みのTodo2"
+  ]);
+  const [todoText, setTodoText] = useState("");
+  const onChangeTodoText = (e) => {
+    setTodoText(e.target.value);
+  };
+  const onClickAdd = () => {
+    if (todoText === "") return;
+    // const newTodos = [...incompleteTodos, todoText];
+    // setIncompleteTodos(newTodos);
+    setIncompleteTodos([...incompleteTodos, todoText]);
+    setTodoText("");
+  };
+  const onClickDelete = (idx) => {
+    const newTodos = [...incompleteTodos];
+    newTodos.splice(idx, 1);
+    setIncompleteTodos(newTodos);
+  };
+  const onClickComplete = (idx) => {
+    onClickDelete(idx);
+    setCompleteTodos([...completeTodos, incompleteTodos[idx]]);
+  };
+  const onClickBack = (idx) => {
+    const newTodos = [...completeTodos];
+    newTodos.splice(idx, 1);
+    setCompleteTodos(newTodos);
+    setIncompleteTodos([...incompleteTodos, completeTodos[idx]]);
+  };
   return (
     <>
-      <div className="input-area">
-        <input placeholder="TODOを入力" />
-        <button>追加</button>
-      </div>
-      <div className="incomplete-area">
-        <p className="title">未完了のTODO</p>
-        <ul>
-          <div className="list-row">
-            <li>未完了のTODO</li>
-            <button>完了</button>
-            <button>削除</button>
-          </div>
-        </ul>
-      </div>
-      <div className="complete-area">
-        <p className="title">完了済みのTODO</p>
-        <ul>
-          <div className="list-row">
-            <li>未完了のTODO</li>
-            <button>戻す</button>
-          </div>
-        </ul>
-      </div>
+      <InputTodo
+        todoText={todoText}
+        onChangeTodoText={onChangeTodoText}
+        onClickAdd={onClickAdd}
+        disabled={incompleteTodos.length >= 5}
+      />
+      {incompleteTodos.length >= 5 && <p>登録できるTodoは5コまで</p>}
+      <IncompleteTodos
+        incompleteTodos={incompleteTodos}
+        onClickComplete={onClickComplete}
+        onClickDelete={onClickDelete}
+      />
+      <CompleteTodos completeTodos={completeTodos} onClickBack={onClickBack} />
     </>
   );
 }
